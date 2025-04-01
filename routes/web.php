@@ -1,22 +1,33 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Store;
-use Illuminate\Http\Request;
-use App\Http\Controllers\StoreController;
 use App\Http\Controllers\FrontController;
-use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\StoreController;
+use App\Models\Category;
+use App\Models\Store;
 use function Ramsey\Uuid\v1;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 Route::get('admin', function () {
     return view('layouts.admin');
 });
 
+// Route::get('/', function () {
+//         $categories=Category::all();
+//         $store=Store::find(1);
+//         $stores=Store::all();
+//         // $stores = Store::with('category')->get();
+//         $category_name = Category::find($store->category);
+//         return view('admin.products.index' ,compact('stores' , 'category_name' , 'categories'));
+// });
+
+
 //store
 
-Route::get('products/index', [StoreController::class ,'index']);
+Route::get('/', [StoreController::class ,'index']);
 
 Route::get('products/create', [StoreController::class ,'create']);
 
@@ -48,3 +59,7 @@ Route::post('categories/update/{id}', [CategoryController::class ,'update']);
 
 Route::get('home/index' , [FrontController::class ,'index']);
 
+// use Illuminate\Support\Facades\Auth;
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

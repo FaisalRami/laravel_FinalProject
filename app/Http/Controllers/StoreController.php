@@ -5,12 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+    }
+
     public function index(){
-        $stores=Store::all();
-        return view('admin.products.index' ,compact('stores'));
+        $categories=Category::all();
+        $store=Store::find(1);
+        // $stores=Store::all();
+        $stores=Store::where('user_id' , Auth::id())->paginate(3);
+        // $stores = Store::with('category')->get();
+        $category_name = Category::find($store->category);
+        return view('admin.products.index' ,compact('stores', 'category_name' , 'categories'));
     }
 
     public function create(){
@@ -27,6 +40,8 @@ class StoreController extends Controller
         $store_quantity=$request->quantity;
         $store_description=$request->description;
 
+
+        $store->user_id = Auth::id();
         $store->name =$store_name;
         $store->category =$store_category;
         $store->price =$store_price;
@@ -42,6 +57,7 @@ class StoreController extends Controller
         Store::find($id)->delete();
         return redirect()->back();
     }
+
     public function edit($id){
         $store=Store::find($id);
         $stores=Store::all();
@@ -65,7 +81,7 @@ class StoreController extends Controller
         $store->description =$store_description;
 
         $store->save();
-        return redirect('products/index');
+        return redirect('/');
     }
 
 

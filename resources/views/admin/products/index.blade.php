@@ -14,11 +14,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($stores as $store)
+                @foreach ($stores as $key => $store)
                     <tr>
-                        <th scope="row">#</th>
+                        <th scope="row">{{ ++$key }}</th>
                         <td>{{ $store->name }}</td>
-                        <td>{{ $store->category }}</td>
+                        <td>{{ $categories->firstWhere('id', $store->category)->name}}</td>
+                        {{-- <td>{{ $store->category->name }}</td> --}}
+                        {{-- <td>{{ $categories[$store->category-1]->name }}</td> --}}
                         <td>{{ $store->price }}</td>
                         <td>{{ $store->quantity }}</td>
                         <td>{{ $store->description }}</td>
@@ -31,5 +33,6 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $stores->links() }}
     </div>
 @endsection
